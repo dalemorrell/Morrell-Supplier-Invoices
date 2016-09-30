@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="VB" Debug="true" Service="Morrell_Supplier_Invoices.RestService" CodeBehind="RestService.svc.vb" %>
