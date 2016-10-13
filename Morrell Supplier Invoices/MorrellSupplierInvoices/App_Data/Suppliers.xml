@@ -9,6 +9,7 @@
     <UID>8c62b7d8-d517-4341-9543-345471eb074b</UID>
     <WebsiteUserID>617809</WebsiteUserID>
   </Supplier>
+  <!--
   <Supplier>
     <CompanyName>Samios</CompanyName>
     <FirstName />
@@ -18,12 +19,13 @@
     <UID>8573859c-e659-448c-9cde-dc47801fba01</UID>
     <WebsiteUserID>3606</WebsiteUserID>
   </Supplier>
+  -->
   <Supplier>
     <CompanyName>Tradelink Plumbing Supplies</CompanyName>
     <FirstName />
     <ItemPrefix>T</ItemPrefix>
     <LastName />
-    <Password>ybr4d6</Password>
+    <Password>2ysur2ysub</Password>
     <UID>ba9cce9b-f216-4298-9015-f58c69070e48</UID>
     <WebsiteUserID>13920651</WebsiteUserID>
   </Supplier>

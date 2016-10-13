@@ -1,7 +1,9 @@
 ﻿' NOTE: You can use the "Rename" command on the context menu to change the class name "RestService" in code, svc and config file together.
 ' NOTE: In order to launch WCF Test Client for testing this service, please select RestService.svc or RestService.svc.vb at the Solution Explorer and start debugging.
+Imports System.Globalization
 Imports System.IO
 Imports System.ServiceModel.Activation
+Imports System.Threading.Tasks
 Imports System.Xml
 Imports System.Xml.Serialization
 Imports Morrell_Supplier_Invoices
@@ -10,7 +12,17 @@ Imports Morrell_Supplier_Invoices
 <ServiceBehavior(InstanceContextMode:=InstanceContextMode.Single)>
 Public Class RestService
     Implements IRestService
+    ''' <summary>
+    ''' Stores supplier list
+    ''' </summary>
+    Private _suppliers As List(Of Supplier) = GetAllSuppliers()
+    Private _supplieractions As Dictionary(Of Guid, iBillsFromWebsite) = GetSupplierActions()
 
+#Region "Suppliers"
+    ''' <summary>
+    ''' Retrieves suppliers from xml file
+    ''' </summary>
+    ''' <returns></returns>
     Private Function GetAllSuppliers() As List(Of Supplier)
         Dim retval As List(Of Supplier)
         Dim xmlDocument = New XmlDocument()
@@ -29,35 +41,97 @@ Public Class RestService
         Return retval
     End Function
 
+    Private Function GetSupplierActions() As Dictionary(Of Guid, iBillsFromWebsite)
+        Dim retVal = New Dictionary(Of Guid, iBillsFromWebsite)
+        For Each s In _suppliers
+            retVal.Add(s.UID, BillsFromWebsite.Factory(s))
+        Next
+        Return retVal
+    End Function
+
+    ''' <summary>
+    ''' Returns all suppliers (JSON format)
+    ''' </summary>
+    ''' <returns></returns>
     Public Function GetAllSuppliersJson() As List(Of Supplier) Implements IRestService.GetAllSuppliersJson
-        Return GetAllSuppliers()
+        Return _suppliers
     End Function
 
+    ''' <summary>
+    ''' Returns all suppliers (XML format)
+    ''' </summary>
+    ''' <returns></returns>
     Public Function GetAllSuppliersXml() As List(Of Supplier) Implements IRestService.GetAllSuppliersXml
-        Return GetAllSuppliers()
+        Return _suppliers
     End Function
 
-    Public Function GetInvoiceJson(supplier As String, invoiceNo As String) As List(Of String) Implements IRestService.GetInvoiceJson
-        Throw New NotImplementedException()
+    ''' <summary>
+    ''' Returns the supplier identified
+    ''' </summary>
+    ''' <param name="id">The UID (from AccountRight) of the supplier</param>
+    ''' <returns></returns>
+    Private Function GetSupplier(id As String) As Supplier
+        Try
+            Dim uid = New Guid(id)
+            Return _suppliers.FirstOrDefault(Function(s) s.UID = uid)
+        Catch ex As Exception
+            Return Nothing
+        End Try
     End Function
 
-    Public Function GetInvoiceNumbersJson(supplier As String, startDate As Date, endDate As Date) As List(Of String) Implements IRestService.GetInvoiceNumbersJson
-        Throw New NotImplementedException()
-    End Function
-
-    Public Function GetInvoiceNumbersXml(supplier As String, startDate As Date, endDate As Date) As List(Of String) Implements IRestService.GetInvoiceNumbersXml
-        Throw New NotImplementedException()
-    End Function
-
-    Public Function GetInvoiceXml(supplier As String, invoiceNo As String) As List(Of String) Implements IRestService.GetInvoiceXml
-        Throw New NotImplementedException()
-    End Function
-
+    ''' <summary>
+    ''' Returns the supplier identified (JSON format)
+    ''' </summary>
+    ''' <param name="id">The UID (from AccountRight) of the supplier</param>
+    ''' <returns></returns>
     Public Function GetSupplierJson(id As String) As Supplier Implements IRestService.GetSupplierJson
+        Return GetSupplier(id)
+    End Function
+
+    ''' <summary>
+    ''' Returns the supplier identified (XML format)
+    ''' </summary>
+    ''' <param name="id">The UID (from AccountRight) of the supplier</param>
+    ''' <returns></returns>
+    Public Function GetSupplierXml(id As String) As Supplier Implements IRestService.GetSupplierXml
+        Return GetSupplier(id)
+    End Function
+#End Region
+
+#Region "Invoices"
+    Private Async Function GetInvoiceNumbersAsync(supplierId As String, startDate As Date, endDate As Date) As Task(Of List(Of String))
+        Try
+            Dim uid = New Guid(supplierId)
+            Dim bfw = _supplieractions(uid)
+
+            If Not Date.TryParse(startDate, bfw.Culture, DateTimeStyles.None, bfw.StartDate) Then
+                bfw.StartDate = Today.Date.AddMonths(-1)
+            End If
+            If Not Date.TryParse(startDate, bfw.Culture, DateTimeStyles.None, bfw.EndDate) Then
+                bfw.EndDate = Today.Date
+            End If
+
+            Return Await bfw.GetBillNumbersAsync
+        Catch ex As Exception
+            Return Nothing
+        End Try
+    End Function
+
+    Public Async Function GetInvoiceNumbersJson(supplierId As String, startDate As Date, endDate As Date) As Task(Of List(Of String)) Implements IRestService.GetInvoiceNumbersJson
+        Return Await GetInvoiceNumbersAsync(supplierId, startDate, endDate)
+    End Function
+
+    Public Async Function GetInvoiceNumbersXml(supplierId As String, startDate As Date, endDate As Date) As Task(Of List(Of String)) Implements IRestService.GetInvoiceNumbersXml
+        Return Await GetInvoiceNumbersAsync(supplierId, startDate, endDate)
+    End Function
+
+    Public Function GetInvoiceJson(supplierId As String, invoiceNo As String) As List(Of String) Implements IRestService.GetInvoiceJson
         Throw New NotImplementedException()
     End Function
 
-    Public Function GetSupplierXml(id As String) As Supplier Implements IRestService.GetSupplierXml
+    Public Function GetInvoiceXml(supplierId As String, invoiceNo As String) As List(Of String) Implements IRestService.GetInvoiceXml
         Throw New NotImplementedException()
     End Function
+
+#End Region
 End Class

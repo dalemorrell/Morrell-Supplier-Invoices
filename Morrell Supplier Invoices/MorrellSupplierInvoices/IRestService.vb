@@ -1,4 +1,5 @@
 ﻿Imports System.ServiceModel
+Imports System.Threading.Tasks
 
 Public Enum Suppliers
     PlumbersSuppliesCoOp
@@ -36,27 +37,27 @@ Public Interface IRestService
 #End Region
 
     <OperationContract>
-    <WebGet(UriTemplate:="{supplier}?from={startDate}&to={endDate}&format=*",
+    <WebGet(UriTemplate:="invoices/{supplierId}?from={startDate}&to={endDate}&format=*",
             BodyStyle:=WebMessageBodyStyle.Wrapped,
             ResponseFormat:=WebMessageFormat.Json)>
-    Function GetInvoiceNumbersJson(supplier As String, startDate As Date, endDate As Date) As List(Of String)
+    Function GetInvoiceNumbersJson(supplierId As String, startDate As Date, endDate As Date) As Task(Of List(Of String))
 
     <OperationContract>
-    <WebGet(UriTemplate:="{supplier}?from={startDate}&to={endDate}&format=xml",
+    <WebGet(UriTemplate:="invoices/{supplierId}?from={startDate}&to={endDate}&format=xml",
             BodyStyle:=WebMessageBodyStyle.Wrapped,
             ResponseFormat:=WebMessageFormat.Xml)>
-    Function GetInvoiceNumbersXml(supplier As String, startDate As Date, endDate As Date) As List(Of String)
+    Function GetInvoiceNumbersXml(supplierId As String, startDate As Date, endDate As Date) As Task(Of List(Of String))
 
     <OperationContract>
-    <WebGet(UriTemplate:="{supplier}/{invoiceNo}?format=*",
+    <WebGet(UriTemplate:="invoices/{supplierId}/{invoiceNo}?format=*",
             BodyStyle:=WebMessageBodyStyle.Wrapped,
             ResponseFormat:=WebMessageFormat.Json)>
-    Function GetInvoiceJson(supplier As String, invoiceNo As String) As List(Of String)
+    Function GetInvoiceJson(supplierId As String, invoiceNo As String) As List(Of String)
 
     <OperationContract>
-    <WebGet(UriTemplate:="{supplier}/{invoiceNo}?format=xml",
+    <WebGet(UriTemplate:="invoices/{supplierId}/{invoiceNo}?format=xml",
             BodyStyle:=WebMessageBodyStyle.Wrapped,
             ResponseFormat:=WebMessageFormat.Xml)>
-    Function GetInvoiceXml(supplier As String, invoiceNo As String) As List(Of String)
+    Function GetInvoiceXml(supplierId As String, invoiceNo As String) As List(Of String)
 
 End Interface

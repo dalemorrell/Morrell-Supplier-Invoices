@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified">
+  <xsd:element name="ArrayOfSupplier">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element minOccurs="0" maxOccurs="unbounded" name="Supplier">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="CompanyName" type="xsd:string" />
+              <xsd:element name="FirstName" />
+              <xsd:element name="ItemPrefix" type="xsd:string" />
+              <xsd:element name="LastName" />
+              <xsd:element name="Password" type="xsd:string" />
+              <xsd:element name="UID" type="xsd:string" />
+              <xsd:element name="WebsiteUserID" type="xsd:unsignedInt" />
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xs:schema>

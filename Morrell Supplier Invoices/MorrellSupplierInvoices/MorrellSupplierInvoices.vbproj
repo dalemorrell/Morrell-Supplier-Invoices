@@ -43,6 +43,10 @@
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HtmlAgilityPack, Version=1.4.9.5, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.4.9.5\lib\Net45\HtmlAgilityPack.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=1.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.1.2.1\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
       <Private>True</Private>
@@ -137,10 +141,13 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Bill.vb" />
     <Compile Include="Classes\Supplier.vb" />
     <Compile Include="Global.asax.vb">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Invoices from Websites\InvoicesFromWebsite.vb" />
+    <Compile Include="Invoices from Websites\Tradelink.vb" />
     <Compile Include="IRestService.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -157,6 +164,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Invoices from Websites\iInvoicesFromWebsite.vb" />
+    <Compile Include="Invoices from Websites\PlumbersSuppliesCoOp.vb" />
     <Compile Include="RestService.svc.vb">
       <DependentUpon>RestService.svc</DependentUpon>
     </Compile>
@@ -184,6 +193,9 @@
     </None>
     <Content Include="packages.config" />
     <Content Include="Service References\Application Insights\ConnectedService.json" />
+    <None Include="Suppliers.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
