@@ -63,7 +63,7 @@ Partial Public MustInherit Class BillsFromWebsite
     ''' <param name="BillNo">The Supplier's Bill Number</param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public MustOverride Async Function GetBillAsync(BillNo As String) As Task(Of Bill) Implements iBillsFromWebsite.GetBillAsync
+    Public MustOverride Async Function GetBillAsync(BillNo As String) As Task(Of iBillsFromWebsite) Implements iBillsFromWebsite.GetBillAsync
 
 #End Region
 

@@ -6,7 +6,6 @@ Imports System.ServiceModel.Activation
 Imports System.Threading.Tasks
 Imports System.Xml
 Imports System.Xml.Serialization
-Imports Morrell_Supplier_Invoices
 
 <AspNetCompatibilityRequirements(RequirementsMode:=AspNetCompatibilityRequirementsMode.Allowed)>
 <ServiceBehavior(InstanceContextMode:=InstanceContextMode.Single)>
@@ -99,7 +98,7 @@ Public Class RestService
 #End Region
 
 #Region "Invoices"
-    Private Async Function GetInvoiceNumbersAsync(supplierId As String, startDate As Date, endDate As Date) As Task(Of List(Of String))
+    Private Async Function GetInvoiceNumbersAsync(supplierId As String, startDate As String, endDate As String) As Task(Of List(Of String))
         Try
             Dim uid = New Guid(supplierId)
             Dim bfw = _supplieractions(uid)
@@ -107,7 +106,7 @@ Public Class RestService
             If Not Date.TryParse(startDate, bfw.Culture, DateTimeStyles.None, bfw.StartDate) Then
                 bfw.StartDate = Today.Date.AddMonths(-1)
             End If
-            If Not Date.TryParse(startDate, bfw.Culture, DateTimeStyles.None, bfw.EndDate) Then
+            If Not Date.TryParse(endDate, bfw.Culture, DateTimeStyles.None, bfw.EndDate) Then
                 bfw.EndDate = Today.Date
             End If
 
@@ -117,20 +116,30 @@ Public Class RestService
         End Try
     End Function
 
-    Public Async Function GetInvoiceNumbersJson(supplierId As String, startDate As Date, endDate As Date) As Task(Of List(Of String)) Implements IRestService.GetInvoiceNumbersJson
+    Public Async Function GetInvoiceNumbersJson(supplierId As String, startDate As String, endDate As String) As Task(Of List(Of String)) Implements IRestService.GetInvoiceNumbersJson
         Return Await GetInvoiceNumbersAsync(supplierId, startDate, endDate)
     End Function
 
-    Public Async Function GetInvoiceNumbersXml(supplierId As String, startDate As Date, endDate As Date) As Task(Of List(Of String)) Implements IRestService.GetInvoiceNumbersXml
+    Public Async Function GetInvoiceNumbersXml(supplierId As String, startDate As String, endDate As String) As Task(Of List(Of String)) Implements IRestService.GetInvoiceNumbersXml
         Return Await GetInvoiceNumbersAsync(supplierId, startDate, endDate)
     End Function
 
-    Public Function GetInvoiceJson(supplierId As String, invoiceNo As String) As List(Of String) Implements IRestService.GetInvoiceJson
-        Throw New NotImplementedException()
+    Public Function GetInvoice(supplierId As String, invoiceNo As String) As iBillsFromWebsite
+        Try
+            Dim uid = New Guid(supplierId)
+            Dim bfw = _supplieractions(uid)
+            Return bfw.GetBillAsync(invoiceNo)
+        Catch ex As Exception
+            Return Nothing
+        End Try
     End Function
 
-    Public Function GetInvoiceXml(supplierId As String, invoiceNo As String) As List(Of String) Implements IRestService.GetInvoiceXml
-        Throw New NotImplementedException()
+    Public Function GetInvoiceJson(supplierId As String, invoiceNo As String) As iBillsFromWebsite Implements IRestService.GetInvoiceJson
+        Return GetInvoice(supplierId, invoiceNo)
+    End Function
+
+    Public Function GetInvoiceXml(supplierId As String, invoiceNo As String) As iBillsFromWebsite Implements IRestService.GetInvoiceXml
+        Return GetInvoice(supplierId, invoiceNo)
     End Function
 
 #End Region

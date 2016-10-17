@@ -208,7 +208,7 @@ Public Class Tradelink
         Return retVal
     End Function
 
-    Public Overrides Async Function GetBillAsync(BillNo As String) As Task(Of Bill)
+    Public Overrides Async Function GetBillAsync(BillNo As String) As Task(Of iBillsFromWebsite)
         Dim html = Await GetBillHtmlAsync(String.Format("https://tradedoor.tradelink.com.au/invoices/view/{0}", BillNo))
         Return GetBillData(html)
     End Function

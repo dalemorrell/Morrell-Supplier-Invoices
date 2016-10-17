@@ -11,5 +11,5 @@ Public Interface iBillsFromWebsite
 
     Function GetBillNumbersAsync() As Task(Of List(Of String))
 
-    Function GetBillAsync(BillNo As String) As Task(Of Bill)
+    Function GetBillAsync(BillNo As String) As Task(Of iBillsFromWebsite)
 End Interface

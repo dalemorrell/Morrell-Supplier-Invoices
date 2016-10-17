@@ -40,24 +40,24 @@ Public Interface IRestService
     <WebGet(UriTemplate:="invoices/{supplierId}?from={startDate}&to={endDate}&format=*",
             BodyStyle:=WebMessageBodyStyle.Wrapped,
             ResponseFormat:=WebMessageFormat.Json)>
-    Function GetInvoiceNumbersJson(supplierId As String, startDate As Date, endDate As Date) As Task(Of List(Of String))
+    Function GetInvoiceNumbersJson(supplierId As String, startDate As String, endDate As String) As Task(Of List(Of String))
 
     <OperationContract>
     <WebGet(UriTemplate:="invoices/{supplierId}?from={startDate}&to={endDate}&format=xml",
             BodyStyle:=WebMessageBodyStyle.Wrapped,
             ResponseFormat:=WebMessageFormat.Xml)>
-    Function GetInvoiceNumbersXml(supplierId As String, startDate As Date, endDate As Date) As Task(Of List(Of String))
+    Function GetInvoiceNumbersXml(supplierId As String, startDate As String, endDate As String) As Task(Of List(Of String))
 
     <OperationContract>
     <WebGet(UriTemplate:="invoices/{supplierId}/{invoiceNo}?format=*",
             BodyStyle:=WebMessageBodyStyle.Wrapped,
             ResponseFormat:=WebMessageFormat.Json)>
-    Function GetInvoiceJson(supplierId As String, invoiceNo As String) As List(Of String)
+    Function GetInvoiceJson(supplierId As String, invoiceNo As String) As iBillsFromWebsite
 
     <OperationContract>
     <WebGet(UriTemplate:="invoices/{supplierId}/{invoiceNo}?format=xml",
             BodyStyle:=WebMessageBodyStyle.Wrapped,
             ResponseFormat:=WebMessageFormat.Xml)>
-    Function GetInvoiceXml(supplierId As String, invoiceNo As String) As List(Of String)
+    Function GetInvoiceXml(supplierId As String, invoiceNo As String) As iBillsFromWebsite
 
 End Interface

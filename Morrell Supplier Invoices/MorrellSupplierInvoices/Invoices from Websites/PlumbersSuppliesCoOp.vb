@@ -226,7 +226,7 @@ Public Class PlumbersSuppliesCoOp
         Return retVal
     End Function
 
-    Public Overrides Async Function GetBillAsync(BillNo As String) As Task(Of Bill)
+    Public Overrides Async Function GetBillAsync(BillNo As String) As Task(Of iBillsFromWebsite)
         Dim JavaParam As New InvoiceAccess
         JavaParam.Type = InvoiceAccess.AccessType.POST_Request
         JavaParam.RequestData = String.Format("dbDate={0}&tranNo={1}&action={2}&target={3}", "1610", BillNo, "Invoice_Detail.php", "winInvoice")
