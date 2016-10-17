@@ -1,4 +1,5 @@
 ﻿Public Class Bill
+    Public Property Supplier As Supplier
     Public Property ShipToAddressLine1 As String
     Public Property ShipToAddressLine2 As String
     Public Property ShipToAddressLine3 As String
